@@ -56,6 +56,7 @@ export const subscription = async (req, res) => {
     if (!car) {
       return res.status(404).json({ success: false, message: "Car not found" });
     }
+    console.log("car==============",car)
 
     const user = await User.findById(userid);
     if (!user) {
@@ -66,8 +67,10 @@ export const subscription = async (req, res) => {
     endDate.setMonth(endDate.getMonth() + Number(months));
 
     const m = Number(months);
+    console.log("m================",m);
+    
     const totalprice = m * Number(car.monthlyprice);
-
+console.log("totalprice=================",totalprice)
        // Razorpay amount is in paise
         const options = {
             amount: totalprice * 100,

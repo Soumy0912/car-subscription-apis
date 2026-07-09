@@ -25,8 +25,6 @@ app.get("/",(req,res)=>{
     res.send("Car Subscription apis.")
 })
 
-// app.listen(3000);
-app.listen(process.env.PORT);
 app.listen(port,host, ()=>{
     console.log(`Server is running on http://${host}:${port}`)
 })
