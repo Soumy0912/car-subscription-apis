@@ -7,6 +7,7 @@ import cors from "cors";
 import "./app/cron/subscription.js";
 import razorpayInstance from './app/config/razor.js';
 import cloudinary from './app/config/cloudinary.js';
+import morgan from 'morgan';
 dotenv.config();
 const app = express();
 app.use(cors({                        
@@ -14,7 +15,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
-
+app.use(morgan("dev"));
 const port=process.env.PORT;
 const host=process.env.HOST
 routes(app);
