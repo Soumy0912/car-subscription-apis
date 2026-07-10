@@ -5,6 +5,7 @@ import uservalid from "../validators/uservalidation.js";
 import Cars from "../models/car/car.js";
 import {sendResponse} from "../utils/handleresponse.js";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 dotenv.config();
 
 export const registerUser = async (req,res) => {
@@ -34,20 +35,20 @@ export const registerUser = async (req,res) => {
         const dataWithoutpassword = user.toObject();
         delete dataWithoutpassword.password;
         delete dataWithoutpassword.__v;
-        const transporter = nodemailer.createTransport({
-                  service: 'gmail', 
-                  auth: {
-                      user: process.env.EMAIL_USER, 
-                      pass: process.env.EMAIL_PASS  
-                  }
-              });
+        // const transporter = nodemailer.createTransport({
+        //           service: 'gmail', 
+        //           auth: {
+        //               user: process.env.EMAIL_USER, 
+        //               pass: process.env.EMAIL_PASS  
+        //           }
+        //       });
         
-              const mailOptions = {
-                  from: `"Car Rental Support" <${process.env.EMAIL_USER}>`,
-                  to: user.email, 
-                  subject: 'User Created Successfully'
-              };
-              await transporter.sendMail(mailOptions);
+        //       const mailOptions = {
+        //           from: `"Car Rental Support" <${process.env.EMAIL_USER}>`,
+        //           to: user.email, 
+        //           subject: 'User Created Successfully'
+        //       };
+        //       await transporter.sendMail(mailOptions);
         return sendResponse(res,201,dataWithoutpassword);
     
     } catch (error) {
@@ -114,6 +115,16 @@ export const updateUser = async (req,res) => {
         delete dataWithoutpassword.__v;
         return sendResponse(res,200,dataWithoutpassword,"Profile updated successfully");
 
+    } catch (error) {
+        return sendResponse(res,500,null,error.message);
+    }
+};
+
+export const getUser = async (req,res) => {
+    try {
+        const id = req.user.id;
+        const user=await User.findById(id).select("-password");
+        return sendResponse(res,200,user,"Profile fetched successfull");
     } catch (error) {
         return sendResponse(res,500,null,error.message);
     }
